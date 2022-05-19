@@ -15,11 +15,7 @@ int main(){
 
     string s;
 
-    peleador * fighters[100];
-
-    arena * arenas[100];
-
-    objeto * objects[100];
+    
 
     int i_p = 0;
 
@@ -29,9 +25,41 @@ int main(){
 
     input.open("data tarea 3.csv");
 
+    while (std::getline(input, s)){
+        
+        string type;
+
+        std::istringstream ss(s); //Convertir a ifstream para poder usar el delimitador de getline()
+        
+        std::getline(ss, type, ';');
+
+        type = type.substr(1);
+
+        if(type == "peleador" || type == "Peleador") i_p++;
+
+        else if(type == "Arena" || type == "arena") i_a++;
+
+        else if(type == "Objeto" || type == "objeto") i_o++;
+        
+
+    }
+
+    peleador * fighters[i_p];
+
+    arena * arenas[i_a];
+
+    objeto * objects[i_o];
+
+
+    input.clear();
+    input.seekg(0, ios::beg);
+
+    i_p = 0;
+    i_a = 0;
+    i_o = 0;
     
     while (std::getline(input, s))
-    {
+    {   
         string sub;
 
         string type;
@@ -66,7 +94,7 @@ int main(){
             i_p++;
         }
 
-        if(type == "Arena" || type == "arena"){
+        else if(type == "Arena" || type == "arena"){
 
             std::getline(ss, sub, ';');
             string nombre = sub;
@@ -89,7 +117,7 @@ int main(){
             i_a++;
         }
 
-        if(type == "Objeto" || type == "objeto"){
+        else if(type == "Objeto" || type == "objeto"){
 
             std::getline(ss, sub, ';');
             string nombre = sub;
