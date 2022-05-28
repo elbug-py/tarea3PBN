@@ -16,5 +16,7 @@ arena::arena(string nombre, string Salud, string Fuerza, string Velocidad, strin
 
 
 void arena::get_info(){
-    cout << "Nombre: " << nombre << " Salud: " << Salud << " Fuerza: " << Fuerza << endl;
+    cout << "Nombre: " << nombre << " Salud: " << Salud << " Fuerza: " << Fuerza << " Velocidad: " << Velocidad << " Inteligencia: "<< Inteligencia << " Resistencia: " << Resistencia << " Leyenda: " << leyenda << endl;
 }
+
+string arena::get_name(){return nombre;}
