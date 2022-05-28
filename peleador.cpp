@@ -15,10 +15,7 @@ peleador::peleador(string nombre, int Salud, int Fuerza, int Velocidad, int Inte
     this->leyenda = leyenda;
 }
 
-string peleador::get_name(){
-    cout << nombre << endl;
-    return nombre;
-}
+
 
 void peleador::get_info(){
     cout << "Nombre: " << nombre << " Salud: " << Salud << " Fuerza: " << Fuerza << " Velocidad: " << Velocidad << " Inteligencia: "<< Inteligencia << " Resistencia: " << Resistencia << " Leyenda: " << leyenda << endl;
@@ -35,6 +32,8 @@ void peleador::set_Inteligencia(int Inteligencia) {this->Inteligencia=Inteligenc
 
 void peleador::set_Resistencia(int Resistencia) {this->Resistencia=Resistencia;}
 
+
+string peleador::get_name(){return nombre;}
 
 int peleador::get_Salud(){return this->Salud;}
 

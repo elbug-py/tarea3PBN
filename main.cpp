@@ -156,19 +156,39 @@ int main(int argc, char** argv){
 
             objects[i_o] = new objeto(nombre, tipo, Salud, Fuerza, Velocidad, Inteligencia, Resistencia, leyenda);
 
+            //DEBO ARREGLAR LA CONVERSION A DECIMAL PERO ESTÁ FUNCIONANDO
+            fighters[i_p-1]->set_Inteligencia(fighters[i_p-1]->get_Inteligencia()*objects[i_o]->get_Inteligencia() + 1);
+
             i_o++;
         }
 
     }
 
-    for (int i = 0; i < i_p; i++) output << fighters[i]->get_name() << endl;;
+    for (int i = 0; i < i_p; i++) output << fighters[i]->get_name() << fighters[i]->get_Inteligencia() <<endl;;
 
     for (int i = 0; i < i_a; i++) output << arenas[i]->get_name() << endl;
 
-    for (int i = 0; i < i_o; i++) output << objects[i]->get_name() << endl;
+    for (int i = 0; i < i_o; i++) output << objects[i]->get_name() << objects[i]->get_Inteligencia() << endl;
 
 
-    for (int i = 0; i < 10; i++) output << fighters[0]->desgaste(i) * fighters[0]->golpe() * (rand() % 3) << endl; // ESTE ES EL CODIGO CON EL QUE SE CALCULAN LOS GOLPES
+    //for (int i = 0; i < 10; i++) output << fighters[0]->desgaste(i) * fighters[0]->golpe() * (rand() % 3) << endl;  ESTE ES EL CODIGO CON EL QUE SE CALCULAN LOS GOLPES
+
+    int turno = 0;
+
+    while (fighters[0]->get_Salud() > 0 && fighters[1]->get_Salud() > 0)
+    {
+        double golpe1 = fighters[0]->desgaste(turno) * fighters[0]->golpe() * (rand() % 3);
+
+        if (golpe1 < 1 && golpe1 != 0) golpe1 = 1;
+
+        fighters[1]->set_Salud(fighters[1]->get_Salud() - golpe1);
+
+        output << "El peleador: " << fighters[0]->get_name() << " Realizo un golpe de: " << golpe1 << endl;
+        output << "La salud restante de: " << fighters[1]->get_name() << " es: " << fighters[1]->get_Salud() << endl;
+
+        turno++;
+    }
+    
 
 
 //#LIBERAR LA MEMORIA UTILIZADA

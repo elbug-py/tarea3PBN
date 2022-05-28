@@ -20,11 +20,28 @@ void objeto::get_info(){
 }
 
 string objeto::get_name(){return nombre;}
-string objeto::get_Salud(){return Salud;}
-string objeto::get_Fuerza(){return Fuerza;}
-string objeto::get_Velocidad(){return Velocidad;}
-string objeto::get_Inteligencia(){return Inteligencia;}
-string objeto::get_Resistencia(){return Resistencia;}
+
+int objeto::get_Salud(){return stoi(Salud);}
+
+float objeto::get_Fuerza(){
+    int Fuerza_int = stoi(Fuerza.substr(1));
+    if(Fuerza[0] == '-') Fuerza_int = Fuerza_int*-1;
+    return 1 + (Fuerza_int/100);}
+
+float objeto::get_Velocidad(){
+    int Velocidad_int = stoi(Velocidad.substr(1));
+    if(Velocidad[0] == '-') Velocidad_int = Velocidad_int*-1;
+    return 1 + (Velocidad_int/100);}
+
+float objeto::get_Inteligencia(){
+    int Inteligencia_int = stoi(Inteligencia);
+    if(Inteligencia[0] == '-') Inteligencia_int = Inteligencia_int*-1;
+    return 1 + (Inteligencia_int/100);}
+
+float objeto::get_Resistencia(){
+    int Resistencia_int = stoi(Resistencia.substr(1));
+    if(Resistencia[0] == '-') Resistencia_int = Resistencia_int*-1;
+    return 1 + (Resistencia_int/100);}
 
 //CUANDO HAGA EL SET CONVERTIR LOS VALORES STRING A STOI() Y LUEGOA DECIMALES DIVIDIENDO EN 100
 //SI HAY UN - LO REOTRNO MULTIPLICADO POR -1
