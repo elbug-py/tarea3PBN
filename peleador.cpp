@@ -17,20 +17,42 @@ peleador::peleador(string nombre, int Salud, int Fuerza, int Velocidad, int Inte
 
 
 
-void peleador::get_info(){
-    cout << "Nombre: " << nombre << " Salud: " << Salud << " Fuerza: " << Fuerza << " Velocidad: " << Velocidad << " Inteligencia: "<< Inteligencia << " Resistencia: " << Resistencia << " Leyenda: " << leyenda << endl;
+string peleador::get_info(){
+    string info;
+
+    info += "Nombre: ";
+    info += nombre;
+    info += "\n- Salud: ";
+    info += to_string(Salud);
+    info += "\n- Fuerza: ";
+    info += to_string(Fuerza);
+    info += "\n- Velocidad: ";
+    info += to_string(Velocidad);
+    info += "\n- Inteligencia: ";
+    info += to_string(Inteligencia);
+    info += "\n- Resistencia: ";
+    info += to_string(Resistencia);
+    info += "\n";
+
+
+    return info;
 }
 
 
-void peleador::set_Salud(int Salud) {this->Salud=Salud;}
+void peleador::set_Salud(int Salud) {if(Salud>=0) this->Salud=Salud;
+                                    else this->Salud = 0;}
 
-void peleador::set_Fuerza(int Fuerza) {this->Fuerza=Fuerza;}
+void peleador::set_Fuerza(int Fuerza) {if(Fuerza>=0) this->Fuerza=Fuerza;
+                                    else this->Fuerza = 0;}
 
-void peleador::set_Velocidad(int Velocidad) {this->Velocidad=Velocidad;}
+void peleador::set_Velocidad(int Velocidad) {if(Velocidad>=0) this->Velocidad=Velocidad;
+                                    else this->Velocidad = 0;}
 
-void peleador::set_Inteligencia(int Inteligencia) {this->Inteligencia=Inteligencia;}
+void peleador::set_Inteligencia(int Inteligencia) {if(Inteligencia>=0) this->Inteligencia=Inteligencia;
+                                    else this->Inteligencia = 0;}
 
-void peleador::set_Resistencia(int Resistencia) {this->Resistencia=Resistencia;}
+void peleador::set_Resistencia(int Resistencia) {if(Resistencia>=1) this->Resistencia=Resistencia;
+                                    else this->Resistencia = 1;}
 
 
 string peleador::get_name(){return nombre;}
@@ -46,7 +68,6 @@ int peleador::get_Inteligencia(){return this->Inteligencia;}
 int peleador::get_Resistencia(){return this->Resistencia;}
 
 double peleador::desgaste(int Turno){
-    if (Resistencia == 0) set_Resistencia(this->Resistencia + 1);
     double frac = 20*Turno/Resistencia;
     return (exp(frac*-1))*(1+frac);
     }

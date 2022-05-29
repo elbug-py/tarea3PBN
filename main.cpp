@@ -18,10 +18,6 @@ int main(int argc, char** argv){
 
     srand(time(nullptr));
 
-    int a = argc;
-
-    cout << a << endl;
-
     ifstream input;
     ofstream output;
 
@@ -33,9 +29,14 @@ int main(int argc, char** argv){
 
     int i_o = 0;
 
-    string file = argv[1];
+    string file;
 
-    cout << file << argv[1] << endl;
+    for (int i = 1; i < argc; i++)
+    {
+        file += argv[i];
+        if (i < argc-1) file += " ";
+    }
+    
 
     input.open(file);
     output.open("Salida.txt");
@@ -156,40 +157,64 @@ int main(int argc, char** argv){
 
             objects[i_o] = new objeto(nombre, tipo, Salud, Fuerza, Velocidad, Inteligencia, Resistencia, leyenda);
 
-            //DEBO ARREGLAR LA CONVERSION A DECIMAL PERO ESTÁ FUNCIONANDO
-            fighters[i_p-1]->set_Inteligencia(fighters[i_p-1]->get_Inteligencia()*objects[i_o]->get_Inteligencia() + 1);
+            
+            fighters[i_p-1]->set_Salud(fighters[i_p-1]->get_Salud()+objects[i_o]->get_Salud());
+            fighters[i_p-1]->set_Fuerza(fighters[i_p-1]->get_Fuerza()+objects[i_o]->get_Fuerza());
+            fighters[i_p-1]->set_Velocidad(fighters[i_p-1]->get_Velocidad()+objects[i_o]->get_Velocidad());
+            fighters[i_p-1]->set_Inteligencia(fighters[i_p-1]->get_Inteligencia()+objects[i_o]->get_Inteligencia());
+            fighters[i_p-1]->set_Resistencia(fighters[i_p-1]->get_Resistencia()+objects[i_o]->get_Resistencia());
+            
 
             i_o++;
         }
 
     }
 
-    for (int i = 0; i < i_p; i++) output << fighters[i]->get_name() << fighters[i]->get_Inteligencia() <<endl;;
-
-    for (int i = 0; i < i_a; i++) output << arenas[i]->get_name() << endl;
-
-    for (int i = 0; i < i_o; i++) output << objects[i]->get_name() << objects[i]->get_Inteligencia() << endl;
+    
 
 
     //for (int i = 0; i < 10; i++) output << fighters[0]->desgaste(i) * fighters[0]->golpe() * (rand() % 3) << endl;  ESTE ES EL CODIGO CON EL QUE SE CALCULAN LOS GOLPES
 
-    int turno = 0;
+    output << fighters[0]->get_name() << " Equipado con: \n\nSe enfrenta a\n\n"<< fighters[1]->get_name() << " Equipado con: \n\nSe enfrentan en el "<< arenas[0]->get_info().substr(2)<<endl;
+    output << "\n\natributos finales:------------------------------------------\n---------------------------------------------------------------\n------------------------------------------------------------------- " <<endl;
+    for (int i = 0; i < i_p; i++) output << fighters[i]->get_info() <<endl;
 
+    int turno = 0;
+    output << "\n\nINICIO PELEA:\n\n"<<endl;
     while (fighters[0]->get_Salud() > 0 && fighters[1]->get_Salud() > 0)
     {
-        double golpe1 = fighters[0]->desgaste(turno) * fighters[0]->golpe() * (rand() % 3);
+        int golpe1 = fighters[0]->desgaste(turno) * fighters[0]->golpe() * (rand() % 3);
 
         if (golpe1 < 1 && golpe1 != 0) golpe1 = 1;
 
         fighters[1]->set_Salud(fighters[1]->get_Salud() - golpe1);
 
-        output << "El peleador: " << fighters[0]->get_name() << " Realizo un golpe de: " << golpe1 << endl;
-        output << "La salud restante de: " << fighters[1]->get_name() << " es: " << fighters[1]->get_Salud() << endl;
+        output << fighters[0]->get_name() << " Ataca a " << fighters[1]->get_name()<< " con un golpe de "<< golpe1 << endl;
+        output << ".Vida de " << fighters[1]->get_name() << " queda en " << fighters[1]->get_Salud() << endl;
+
+        if (fighters[1]->get_Salud() == 0) {
+            output<<"--------- "<<fighters[1]->get_name()<<" muere----------------------\n-------------- Fin de la pelea ----------------------\n-------------- Ganador: "<< fighters[0]->get_name()<<" ----------------" <<endl;
+            break;}
+
+        int golpe2 = fighters[1]->desgaste(turno) * fighters[1]->golpe() * (rand() % 3);
+
+        if (golpe2 < 1 && golpe2 != 0) golpe2 = 1;
+
+        fighters[0]->set_Salud(fighters[0]->get_Salud() - golpe2);
+
+        output << fighters[1]->get_name() << " Ataca a " << fighters[0]->get_name()<< " con un golpe de "<< golpe2 << endl;
+        output << ".Vida de " << fighters[0]->get_name() << " queda en " << fighters[0]->get_Salud() << endl;
+
+        if (fighters[0]->get_Salud() == 0) {
+            output<<"--------- "<<fighters[0]->get_name()<<" muere----------------------\n-------------- Fin de la pelea ----------------------\n-------------- Ganador: "<< fighters[1]->get_name()<<" ----------------" <<endl;
+            break;}
 
         turno++;
+
+        output << "---------------Fin "<< turno << "° turno---------------------\n---------------------------\n-----------------------------------------------\n-------------------------"<<endl;
     }
     
-
+    
 
 //#LIBERAR LA MEMORIA UTILIZADA
     for (int i = 0; i < i_p; i++) delete fighters[i];
@@ -205,7 +230,7 @@ int main(int argc, char** argv){
 
     auto duration = duration_cast<microseconds>(stop - start);
  
-    cout << duration.count() << endl;
+    cout << "Tiempo de ejecución: " << duration.count() << " microsegundos" << endl;
 
     return 0;
 }

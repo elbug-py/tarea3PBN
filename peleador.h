@@ -17,7 +17,7 @@ public:
 
     peleador(string, int, int, int, int, int, string );
     string get_name();
-    void get_info();
+    string get_info();
     int get_Salud();
     int get_Fuerza();
     int get_Velocidad();

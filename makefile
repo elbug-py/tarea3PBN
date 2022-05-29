@@ -1,6 +1,6 @@
 CC=g++
 flags=-std=c++11 -Wall -Wextra -Wundef -Werror -Wuninitialized -Winit-self
-file=data_tarea_3.csv
+file=data tarea 3.csv
 output=Salida.txt
 
 

@@ -15,7 +15,7 @@ private:
 
 public:
     arena(string, string, string, string, string, string, string );
-    void get_info();
+    string get_info();
     string get_name();
 
 };
