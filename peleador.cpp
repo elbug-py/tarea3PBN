@@ -87,3 +87,19 @@ double peleador::golpe(){
 void peleador::add_object(string obj){this->objetos += obj;
                                     this->objetos+=" ";}
 
+void peleador::kIng_of_the_dead(){
+    Inteligencia *= 0.5F;
+}
+
+void peleador::last_breath(){
+    set_Salud(1);
+    set_Fuerza(get_Fuerza()*1.5F);
+    set_Velocidad(get_Velocidad()*1.5F);
+    set_Resistencia(get_Resistencia()*1.5F);
+}
+
+void peleador::last_breath_undo(){
+    set_Fuerza(get_Fuerza()/1.5F);
+    set_Velocidad(get_Velocidad()/1.5F);
+    set_Resistencia(get_Resistencia()/1.5F);
+}

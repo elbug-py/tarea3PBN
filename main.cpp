@@ -14,6 +14,10 @@ using namespace std::chrono;
 
 int main(int argc, char** argv){
 
+    cout << "\n\nBIENVENID@ A MOCHA!\n\nPRESIONA ENTER PARA INICIAR LA PELEA:"<<endl;
+    getchar();
+
+
     auto start = high_resolution_clock::now();
 
     srand(time(nullptr));
@@ -106,7 +110,7 @@ int main(int argc, char** argv){
             string leyenda = sub;
             while(std::getline(ss, sub, ';')){ leyenda = leyenda.append(sub);}
             
-            fighters[i_p] = new peleador(nombre, Salud, Fuerza, Velocidad, Inteligencia, Resistencia, leyenda, "");
+            fighters[i_p] = new peleador(nombre, Salud, Fuerza, Velocidad, Inteligencia, Resistencia, leyenda, ""); //le añadí al constructor el atributo objetos para poder guardar los nombres de los objetos equipados
 
             i_p++;
         }
@@ -183,15 +187,44 @@ int main(int argc, char** argv){
 
     }
 
-    
+    int kod_0 = 0; //KING OF THE DEAD FIGHTER[0]
+    int kod_1 = 0;
+    int lb_0 = 0; //LAST BREATH FIGHTER[0]
+    int lb_1 = 0;
+    int reset0 = 0;// RESETEA LOS STATS LUEGO DE REALIZAR LA CONVERSION EN ULTIMO ALIENTO
+    int reset1 = 0;
+
+    int prob0 = rand() % 2;
+    int prob1 = rand() % 2;
+
+    int health_kod_0;
+    int health_kod_1;
+
+    if (prob0 == 0){
+        kod_0++;
+        health_kod_0 = fighters[0]->get_Salud()*0.5F;
+        }
+    else lb_0++;
+    if (prob1 == 0){
+        kod_1++;
+        health_kod_1 = fighters[1]->get_Salud()*0.5F;
+        }
+    else lb_1++;
 
 
-    //for (int i = 0; i < 10; i++) output << fighters[0]->desgaste(i) * fighters[0]->golpe() * (rand() % 3) << endl;  ESTE ES EL CODIGO CON EL QUE SE CALCULAN LOS GOLPES
+
 
     output << fighters[0]->get_name() << " equipado con los objetos: "<< fighters[0]->get_objects() <<"\n\nSe enfrenta a\n\n"<< fighters[1]->get_name() << " equipado con los objetos: "<< fighters[1]->get_objects() <<"\n\nSe enfrentan en el "<< arenas[0]->get_info().substr(2)<<endl;
     output << "\n\natributos finales:------------------------------------------\n---------------------------------------------------------------\n-------------------------------------------------------------------\n" <<endl;
     for (int i = 0; i < i_p; i++) output << fighters[i]->get_info() <<endl;
+    if (kod_0==1) output << "La arena a conferido a "<< fighters[0]->get_name() << " la habilidad \"rey de los muertos\"\n-----------------------------------------------------------------------"<<endl;
+    
+    if (lb_0==1) output << "La arena a conferido a "<< fighters[0]->get_name() << " la habilidad \"ultimo aliento\"\n-----------------------------------------------------------------------"<<endl;
+    
+    if (kod_1==1) output << "La arena a conferido a "<< fighters[1]->get_name() << " la habilidad \"rey de los muertos\"\n-----------------------------------------------------------------------"<<endl;
 
+    if (lb_1==1) output << "La arena a conferido a "<< fighters[1]->get_name() << " la habilidad \"ultimo aliento\"\n-----------------------------------------------------------------------"<<endl;
+    
     int turno = 0;
     output << "\n\nINICIO PELEA:\n\n"<<endl;
     while (fighters[0]->get_Salud() > 0 && fighters[1]->get_Salud() > 0)
@@ -220,6 +253,30 @@ int main(int argc, char** argv){
                 output << fighters[0]->get_name() << " Ataca a " << fighters[1]->get_name()<< " con un golpe critico de "<< golpe1;
                 output << ", vida de " << fighters[1]->get_name() << " queda en " << fighters[1]->get_Salud() << endl;
             }
+
+            if(reset0 == 1){
+                fighters[0]->last_breath_undo();
+                reset0--;
+            }
+
+            if (fighters[1]->get_Salud()==0 && kod_1 == 1){
+                int prob = rand() % 10 + 1;
+                    if(prob <= 3){
+                    output <<"---------------- " <<fighters[1]->get_name() <<" muere-----------" << endl;
+                    output <<"-------- Habilidad especial Rey de los muerto activada -----------------------"<<endl;
+                    fighters[1]->kIng_of_the_dead();
+                    fighters[1]->set_Salud(health_kod_1);
+                    }
+            }
+            else if (fighters[1]->get_Salud()<=10 && fighters[1]->get_Salud()>0 && lb_1 == 1){
+                int prob = rand() % 10 + 1;
+                    if(prob <= 4){
+                    output <<"---------------- " <<fighters[1]->get_name() <<" está a punto de morir-----------" << endl;
+                    output <<"-------- Habilidad especial Ultimo Aliento activada -----------------------"<<endl;
+                    fighters[1]->last_breath();
+                    reset1++;
+                    }
+            }
         }
 
         if (fighters[1]->get_Salud() == 0) {
@@ -246,6 +303,30 @@ int main(int argc, char** argv){
             else {
                 output << fighters[1]->get_name() << " Ataca a " << fighters[0]->get_name()<< " con un golpe critico de "<< golpe2;
                 output << ", vida de " << fighters[0]->get_name() << " queda en " << fighters[0]->get_Salud() << endl;
+            }
+
+            if(reset1 == 1){
+                fighters[1]->last_breath_undo();
+                reset1--;
+            }
+
+            if (fighters[0]->get_Salud()==0 && kod_0 == 1){
+                int prob = rand() % 10 + 1;
+                    if(prob <= 3){
+                    output <<"---------------- " <<fighters[0]->get_name() <<" muere-----------" << endl;
+                    output <<"-------- Habilidad especial Rey de los muertos activada -----------------------"<<endl;
+                    fighters[0]->kIng_of_the_dead();
+                    fighters[0]->set_Salud(health_kod_0);
+                    }
+            }
+            else if (fighters[0]->get_Salud()<=10 && fighters[0]->get_Salud()>0 && lb_0 == 1){
+                int prob = rand() % 10 + 1;
+                    if(prob <= 4){
+                    output <<"---------------- " <<fighters[0]->get_name() <<" está a punto de morir-----------" << endl;
+                    output <<"-------- Habilidad especial Ultimo Aliento activada -----------------------"<<endl;
+                    fighters[0]->last_breath();
+                    reset0++;
+                    }
             }
         }
 
@@ -275,6 +356,7 @@ int main(int argc, char** argv){
     
 
     input.close();
+    output.close();
 
     auto stop = high_resolution_clock::now();
 

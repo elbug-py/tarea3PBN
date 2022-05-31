@@ -33,6 +33,9 @@ public:
     void add_object(string);
     double desgaste(int);
     double golpe();
+    void kIng_of_the_dead();
+    void last_breath();
+    void last_breath_undo();
 
 
 };
