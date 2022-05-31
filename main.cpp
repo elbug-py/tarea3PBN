@@ -106,7 +106,7 @@ int main(int argc, char** argv){
             string leyenda = sub;
             while(std::getline(ss, sub, ';')){ leyenda = leyenda.append(sub);}
             
-            fighters[i_p] = new peleador(nombre, Salud, Fuerza, Velocidad, Inteligencia, Resistencia, leyenda);
+            fighters[i_p] = new peleador(nombre, Salud, Fuerza, Velocidad, Inteligencia, Resistencia, leyenda, "");
 
             i_p++;
         }
@@ -131,6 +131,18 @@ int main(int argc, char** argv){
 
             arenas[i_a] = new arena(nombre, Salud, Fuerza, Velocidad, Inteligencia, Resistencia, leyenda);
 
+            
+            fighters[0]->set_Salud(fighters[0]->get_Salud()*arenas[i_a]->get_Salud());
+            fighters[0]->set_Fuerza(fighters[0]->get_Fuerza()*arenas[i_a]->get_Fuerza());
+            fighters[0]->set_Velocidad(fighters[0]->get_Velocidad()*arenas[i_a]->get_Velocidad());
+            fighters[0]->set_Inteligencia(fighters[0]->get_Inteligencia()*arenas[i_a]->get_Inteligencia());
+            fighters[0]->set_Resistencia(fighters[0]->get_Resistencia()*arenas[i_a]->get_Resistencia());
+
+            fighters[1]->set_Salud(fighters[1]->get_Salud()*arenas[i_a]->get_Salud());
+            fighters[1]->set_Fuerza(fighters[1]->get_Fuerza()*arenas[i_a]->get_Fuerza());
+            fighters[1]->set_Velocidad(fighters[1]->get_Velocidad()*arenas[i_a]->get_Velocidad());
+            fighters[1]->set_Inteligencia(fighters[1]->get_Inteligencia()*arenas[i_a]->get_Inteligencia());
+            fighters[1]->set_Resistencia(fighters[1]->get_Resistencia()*arenas[i_a]->get_Resistencia());
 
             i_a++;
         }
@@ -163,6 +175,7 @@ int main(int argc, char** argv){
             fighters[i_p-1]->set_Velocidad(fighters[i_p-1]->get_Velocidad()+objects[i_o]->get_Velocidad());
             fighters[i_p-1]->set_Inteligencia(fighters[i_p-1]->get_Inteligencia()+objects[i_o]->get_Inteligencia());
             fighters[i_p-1]->set_Resistencia(fighters[i_p-1]->get_Resistencia()+objects[i_o]->get_Resistencia());
+            fighters[i_p-1]->add_object(objects[i_o]->get_name());
             
 
             i_o++;
@@ -175,43 +188,80 @@ int main(int argc, char** argv){
 
     //for (int i = 0; i < 10; i++) output << fighters[0]->desgaste(i) * fighters[0]->golpe() * (rand() % 3) << endl;  ESTE ES EL CODIGO CON EL QUE SE CALCULAN LOS GOLPES
 
-    output << fighters[0]->get_name() << " Equipado con: \n\nSe enfrenta a\n\n"<< fighters[1]->get_name() << " Equipado con: \n\nSe enfrentan en el "<< arenas[0]->get_info().substr(2)<<endl;
-    output << "\n\natributos finales:------------------------------------------\n---------------------------------------------------------------\n------------------------------------------------------------------- " <<endl;
+    output << fighters[0]->get_name() << " equipado con los objetos: "<< fighters[0]->get_objects() <<"\n\nSe enfrenta a\n\n"<< fighters[1]->get_name() << " equipado con los objetos: "<< fighters[1]->get_objects() <<"\n\nSe enfrentan en el "<< arenas[0]->get_info().substr(2)<<endl;
+    output << "\n\natributos finales:------------------------------------------\n---------------------------------------------------------------\n-------------------------------------------------------------------\n" <<endl;
     for (int i = 0; i < i_p; i++) output << fighters[i]->get_info() <<endl;
 
     int turno = 0;
     output << "\n\nINICIO PELEA:\n\n"<<endl;
     while (fighters[0]->get_Salud() > 0 && fighters[1]->get_Salud() > 0)
-    {
-        int golpe1 = fighters[0]->desgaste(turno) * fighters[0]->golpe() * (rand() % 3);
+    {   
 
-        if (golpe1 < 1 && golpe1 != 0) golpe1 = 1;
+        int finish1 = 0;//para ver si los golpes del jugador llegan a 0
+        int finish2 = 0;
+        int crit = (rand() % 3);
+        int golpe1 = fighters[0]->desgaste(turno) * fighters[0]->golpe() * crit;
 
-        fighters[1]->set_Salud(fighters[1]->get_Salud() - golpe1);
+        if (fighters[0]->desgaste(turno) * fighters[0]->golpe() < 1) {
+            finish1++;
+            output << fighters[0]->get_name() << " se ha quedado sin resistencia para seguir golpeando" << endl;
+        }
 
-        output << fighters[0]->get_name() << " Ataca a " << fighters[1]->get_name()<< " con un golpe de "<< golpe1 << endl;
-        output << ".Vida de " << fighters[1]->get_name() << " queda en " << fighters[1]->get_Salud() << endl;
+        else{
+            fighters[1]->set_Salud(fighters[1]->get_Salud() - golpe1);
+
+            if (crit == 0){ output << fighters[0]->get_name() << " falla el turno " << endl;}
+            else if (crit == 1)
+            {
+            output << fighters[0]->get_name() << " Ataca a " << fighters[1]->get_name()<< " con un golpe de "<< golpe1;
+                output << ", vida de " << fighters[1]->get_name() << " queda en " << fighters[1]->get_Salud() << endl;
+            }
+            else {
+                output << fighters[0]->get_name() << " Ataca a " << fighters[1]->get_name()<< " con un golpe critico de "<< golpe1;
+                output << ", vida de " << fighters[1]->get_name() << " queda en " << fighters[1]->get_Salud() << endl;
+            }
+        }
 
         if (fighters[1]->get_Salud() == 0) {
             output<<"--------- "<<fighters[1]->get_name()<<" muere----------------------\n-------------- Fin de la pelea ----------------------\n-------------- Ganador: "<< fighters[0]->get_name()<<" ----------------" <<endl;
             break;}
 
-        int golpe2 = fighters[1]->desgaste(turno) * fighters[1]->golpe() * (rand() % 3);
+        crit = rand() % 3;
+        int golpe2 = fighters[1]->desgaste(turno) * fighters[1]->golpe() * crit;
 
-        if (golpe2 < 1 && golpe2 != 0) golpe2 = 1;
+        if (fighters[1]->desgaste(turno) * fighters[1]->golpe() < 1) {
+            finish2++;
+            output << fighters[1]->get_name() << " se ha quedado sin resistencia para seguir golpeando" << endl;
+        }
 
-        fighters[0]->set_Salud(fighters[0]->get_Salud() - golpe2);
+        else{
+            fighters[0]->set_Salud(fighters[0]->get_Salud() - golpe2);
 
-        output << fighters[1]->get_name() << " Ataca a " << fighters[0]->get_name()<< " con un golpe de "<< golpe2 << endl;
-        output << ".Vida de " << fighters[0]->get_name() << " queda en " << fighters[0]->get_Salud() << endl;
+            if (crit == 0){ output << fighters[1]->get_name() << " falla el turno " << endl;}
+            else if (crit == 1)
+            {
+            output << fighters[1]->get_name() << " Ataca a " << fighters[0]->get_name()<< " con un golpe de "<< golpe2;
+                output << ", vida de " << fighters[0]->get_name() << " queda en " << fighters[0]->get_Salud() << endl;
+            }
+            else {
+                output << fighters[1]->get_name() << " Ataca a " << fighters[0]->get_name()<< " con un golpe critico de "<< golpe2;
+                output << ", vida de " << fighters[0]->get_name() << " queda en " << fighters[0]->get_Salud() << endl;
+            }
+        }
 
         if (fighters[0]->get_Salud() == 0) {
             output<<"--------- "<<fighters[0]->get_name()<<" muere----------------------\n-------------- Fin de la pelea ----------------------\n-------------- Ganador: "<< fighters[1]->get_name()<<" ----------------" <<endl;
             break;}
 
+        if (finish1 > 0 && finish2 > 0){
+            output << "---------------------------------Ninguno de los peleadores tiene resistencia para seguir luchando, es un empate------------------" << endl;
+            output<<"-------------------------------\n-------------- Fin de la pelea ----------------------\n------------------------------" <<endl;    
+            break;}
+        
+
         turno++;
 
-        output << "---------------Fin "<< turno << "° turno---------------------\n---------------------------\n-----------------------------------------------\n-------------------------"<<endl;
+        output << "---------------Fin "<< turno << "° turno---------------------\n---------------------------\n-----------------------------------------------\n-------------------------\n"<<endl;
     }
     
     

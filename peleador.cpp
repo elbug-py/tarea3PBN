@@ -5,7 +5,7 @@
 
 using namespace std;
 
-peleador::peleador(string nombre, int Salud, int Fuerza, int Velocidad, int Inteligencia, int Resistencia, string leyenda){
+peleador::peleador(string nombre, int Salud, int Fuerza, int Velocidad, int Inteligencia, int Resistencia, string leyenda, string Objetos){
     this->nombre = nombre;
     this->Salud = Salud;
     this->Fuerza = Fuerza;
@@ -13,6 +13,7 @@ peleador::peleador(string nombre, int Salud, int Fuerza, int Velocidad, int Inte
     this->Inteligencia = Inteligencia;
     this->Resistencia = Resistencia;
     this->leyenda = leyenda;
+    this->objetos = Objetos;
 }
 
 
@@ -51,8 +52,8 @@ void peleador::set_Velocidad(int Velocidad) {if(Velocidad>=0) this->Velocidad=Ve
 void peleador::set_Inteligencia(int Inteligencia) {if(Inteligencia>=0) this->Inteligencia=Inteligencia;
                                     else this->Inteligencia = 0;}
 
-void peleador::set_Resistencia(int Resistencia) {if(Resistencia>=1) this->Resistencia=Resistencia;
-                                    else this->Resistencia = 1;}
+void peleador::set_Resistencia(int Resistencia) {if(Resistencia>=0) this->Resistencia=Resistencia;
+                                    else this->Resistencia = 0;}
 
 
 string peleador::get_name(){return nombre;}
@@ -67,9 +68,14 @@ int peleador::get_Inteligencia(){return this->Inteligencia;}
 
 int peleador::get_Resistencia(){return this->Resistencia;}
 
+string peleador::get_objects(){return this->objetos;}
+
 double peleador::desgaste(int Turno){
-    double frac = 20*Turno/Resistencia;
-    return (exp(frac*-1))*(1+frac);
+    if (Resistencia > 1){
+        double frac = 20*Turno/Resistencia;
+        return (exp(frac*-1))*(1+frac);
+    }
+    else return 0;
     }
 
 double peleador::golpe(){
@@ -77,3 +83,7 @@ double peleador::golpe(){
     double punch = frac + Inteligencia; //RECORDAR MULTIPLICAR ESTO POR desgaste(turno) Y POR EL NUMERO RANDOM
     return punch;
 }
+
+void peleador::add_object(string obj){this->objetos += obj;
+                                    this->objetos+=" ";}
+

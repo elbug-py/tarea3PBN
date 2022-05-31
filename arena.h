@@ -17,5 +17,10 @@ public:
     arena(string, string, string, string, string, string, string );
     string get_info();
     string get_name();
+    float get_Salud();
+    float get_Fuerza();
+    float get_Velocidad();
+    float get_Inteligencia();
+    float get_Resistencia();
 
 };
